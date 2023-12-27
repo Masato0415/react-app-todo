@@ -5,7 +5,7 @@ import { InputTodo } from './Components/inputTodo';
 function App() {
   return (
     <>
-    <InputTodo />
+      <InputTodo />
     </>
   );
 }
