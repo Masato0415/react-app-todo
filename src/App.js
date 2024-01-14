@@ -1,10 +1,12 @@
-
-import './App.css';
-import { InputTodo } from './inputTodo';
+import React, { useState } from 'react';
+import { Menu, MenuButton, MenuList, MenuItem, Button } from '@chakra-ui/react';
+//import { ChevronDownIcon } from '@chakra-ui/icons';
 
 function App() {
+
   return (
     <>
+
       <header>
         <p className="bg-lime-400 p-2 text-center text-slate-100">Todoアプリ(仮)</p>
       </header>
@@ -23,21 +25,34 @@ function App() {
 
           <li className="flex mb-[10px]">
             <input id="checkbox" type="checkbox" className="w-5 h-5 cursor-pointer mr-3"></input>
-            <p class="text-1xl">カレーを作る</p>
+            <p className="text-1xl">カレーを作る</p>
 
           </li>
           <li className="flex mb-[10px] ">
             <input id="checkbox" type="checkbox" className="w-5 h-5 cursor-pointer mr-3"></input>
-            <p class="text-1xl">カレーを食べる</p>
+            <p className="text-1xl">カレーを食べる</p>
           </li>
 
         </ul>
+        <Menu>
+          <MenuButton as={Button}>
+            メニュー
+          </MenuButton>
+          <MenuList>
+            <MenuItem>編集</MenuItem>
+            <MenuItem>削除</MenuItem>
+            <MenuItem>終了</MenuItem>
+          </MenuList>
+        </Menu>
+
       </div>
+
 
     </>
 
   );
 
 }
+
 export default App;
 
