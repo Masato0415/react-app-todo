@@ -5,7 +5,6 @@ import {
 } from '@chakra-ui/react';
 import { v4 as uuidv4 } from 'uuid';
 
-//import { ChevronDownIcon } from '@chakra-ui/icons';
 
 function App() {
 
@@ -38,9 +37,17 @@ function App() {
 
 
   const onClickChecked = (id) => {
+
+    const updatedTodos = todos.map((todo) => { return todo.id === id ? { ...todo, checked: !todo.checked } : todo });
+
+    setTodos(updatedTodos);
+
+
+  }
+
+  const onClickDelete = () => {
+    const updatedTodos = todos.filter((todo) => todo.checked === false)
     
-    const updatedTodos = todos.map((todo) => { todo.id === id ? { ...todo, checked: !todo.checked } : todo });
-    console.log(updatedTodos);
     setTodos(updatedTodos);
 
   }
@@ -58,10 +65,8 @@ function App() {
       {todos.map((todo) => (
         <Box key={todo.id}>
           <Flex>
-            <Checkbox onChange={() =>{onClickChecked(todo.id)}} isChecked={todo.checked}></Checkbox>
+            <Checkbox onChange={() => { onClickChecked(todo.id) }} isChecked={todo.checked}></Checkbox>
             <Box>{todo.title}</Box>
-            
-
           </Flex>
         </Box>
       ))}
@@ -72,7 +77,7 @@ function App() {
         </MenuButton>
         <MenuList>
           <MenuItem>編集</MenuItem>
-          <MenuItem>削除</MenuItem>
+          <MenuItem onClick={onClickDelete}>削除</MenuItem>
         </MenuList>
       </Menu>
 
