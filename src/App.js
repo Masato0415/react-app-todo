@@ -1,9 +1,9 @@
+/* eslint-disable */
 import React, { useState } from 'react';
 import {
   Box, Menu, MenuButton, MenuList, MenuItem, Button, Checkbox, FormControl, FormLabel, Input, Flex,
 } from '@chakra-ui/react';
 import { v4 as uuidv4 } from 'uuid';
-
 
 //import { ChevronDownIcon } from '@chakra-ui/icons';
 
@@ -11,7 +11,7 @@ function App() {
 
   const [input, setInput] = useState("");
   const [todos, setTodos] = useState([]);
-  const [checked, setChecked] = useState(true);
+
 
   const handleAddTodo = () => {
 
@@ -30,16 +30,24 @@ function App() {
 
     const formattedDate = formatDate(today);
 
-
-    const newTodos = [...todos];
-    newTodos.push({ id: uuidv4(), todo: input, checked: checked, created: formattedDate });
+    const newTodo = { id: uuidv4(), title: input, checked: false, created: formattedDate };
+    const newTodos = [...todos, newTodo];
     setTodos(newTodos);
     setInput("");
   }
 
+
+  const onClickChecked = (id) => {
+    
+    const updatedTodos = todos.map((todo) => { todo.id === id ? { ...todo, checked: !todo.checked } : todo });
+    console.log(updatedTodos);
+    setTodos(updatedTodos);
+
+  }
+
+
   return (
     <>
-
       <FormControl>
         <FormLabel>Todoを入力してください</FormLabel>
         <Input value={input} onChange={(e) => { setInput(e.target.value) }} />
@@ -50,8 +58,10 @@ function App() {
       {todos.map((todo) => (
         <Box key={todo.id}>
           <Flex>
-            <Checkbox onChange={() => { setChecked((checked => !checked)) }} isChecked={todo.checked}></Checkbox>
-            <Box>{todo.todo}</Box>
+            <Checkbox onChange={() =>{onClickChecked(todo.id)}} isChecked={todo.checked}></Checkbox>
+            <Box>{todo.title}</Box>
+            
+
           </Flex>
         </Box>
       ))}
