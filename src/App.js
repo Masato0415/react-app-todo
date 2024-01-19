@@ -64,9 +64,8 @@ function App() {
       {todos.map((todo) => (
         <Box key={todo.id}>
           <Flex>
-            <Checkbox onChange={() => { onClickChecked(todo.id) }} ></Checkbox>
-            <Box as={todo.checked === false ? "":"del"}>{todo.title}</Box>
-            {console.log(todo.checked)}
+            <Checkbox onChange={() => { onClickChecked(todo.id) }} isChecked={todo.checked}></Checkbox>
+            {todo.checked ? (<Box as="del">{todo.title}</Box>) : (<Box>{todo.title}</Box>)}
           </Flex>
         </Box>
       ))}
