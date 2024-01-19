@@ -1,7 +1,7 @@
 /* eslint-disable */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
-  Box, Menu, MenuButton, MenuList, MenuItem, Button, Checkbox, FormControl, FormLabel, Input, Flex,
+  Box, Menu, MenuButton, MenuList, MenuItem, Button, Checkbox, FormControl, FormLabel, Input, Flex,Text
 } from '@chakra-ui/react';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -52,7 +52,6 @@ function App() {
 
   }
 
-
   return (
     <>
       <FormControl>
@@ -66,7 +65,7 @@ function App() {
         <Box key={todo.id}>
           <Flex>
             <Checkbox onChange={() => { onClickChecked(todo.id) }} isChecked={todo.checked}></Checkbox>
-            <Box>{todo.title}</Box>
+            {todo.checked ? (<Box as="del">{todo.title}</Box>) : (<Box>{todo.title}</Box>)}
           </Flex>
         </Box>
       ))}
@@ -80,6 +79,7 @@ function App() {
           <MenuItem onClick={onClickDelete}>削除</MenuItem>
         </MenuList>
       </Menu>
+      
 
     </>
   );
