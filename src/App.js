@@ -1,15 +1,17 @@
 /* eslint-disable */
-import React, { useState, useEffect } from 'react';
-import {
-  Box, Menu, MenuButton, MenuList, MenuItem, Button, Checkbox, FormControl, FormLabel, Input, Flex,Text
-} from '@chakra-ui/react';
+import React, { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
+import Form from "./Components/Form";
+import Todos from "./Components/Todos";
+import Menus from "./Components/Menus";
+import Edit from "./Components/Edit";
 
 
 function App() {
 
   const [input, setInput] = useState("");
   const [todos, setTodos] = useState([]);
+  const [edit, setEdit] = useState(false);
 
 
   const handleAddTodo = () => {
@@ -41,49 +43,39 @@ function App() {
     const updatedTodos = todos.map((todo) => { return todo.id === id ? { ...todo, checked: !todo.checked } : todo });
 
     setTodos(updatedTodos);
-
-
   }
 
   const onClickDelete = () => {
     const incompleteTodos = todos.filter((todo) => todo.checked === false)
-    
+
     setTodos(incompleteTodos);
 
   }
 
+  const onClickEdit = () => {
+    let editCount = todos.filter(todo => todo.checked === true);
+    editCount.length === 1 ? setEdit(true) : (function () { setEdit(false), alert("1つのみ選択してください") }())
+
+  }
+
+  const handleTodoEdit = () => {
+    const check = todos.map((todo) => todo.checked === true ? { ...todo, title: input, checked: false } : todo);
+    setEdit(false);
+    setInput("");
+    setTodos(check);
+  }
+
   return (
     <>
-      <FormControl>
-        <FormLabel>Todoを入力してください</FormLabel>
-        <Input value={input} onChange={(e) => { setInput(e.target.value) }} />
-        <Button colorScheme="green" onClick={handleAddTodo}>Add</Button>
-      </FormControl>
+      {edit ? (< Edit input={input} setInput={setInput} handleTodoEdit={handleTodoEdit} />) :
+        (< Form input={input} setInput={setInput} handleAddTodo={handleAddTodo} />)}
 
+      < Todos todos={todos} onClickChecked={onClickChecked} />
 
-      {todos.map((todo) => (
-        <Box key={todo.id}>
-          <Flex>
-            <Checkbox onChange={() => { onClickChecked(todo.id) }} isChecked={todo.checked}></Checkbox>
-            {todo.checked ? (<Box as="del">{todo.title}</Box>) : (<Box>{todo.title}</Box>)}
-          </Flex>
-        </Box>
-      ))}
+      < Menus onClickDelete={onClickDelete} onClickEdit={onClickEdit} />
 
-      <Menu>
-        <MenuButton as={Button}>
-          メニュー
-        </MenuButton>
-        <MenuList>
-          <MenuItem>編集</MenuItem>
-          <MenuItem onClick={onClickDelete}>削除</MenuItem>
-        </MenuList>
-      </Menu>
-      
 
     </>
-  );
-
+  )
 }
-
 export default App;
