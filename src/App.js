@@ -59,10 +59,10 @@ function App() {
   }
 
   const handleTodoEdit = () => {
-    const check = todos.map((todo) => todo.checked === true ? { ...todo, title: input, checked: false } : todo);
+    const editTodos = todos.map((todo) => todo.checked === true ? { ...todo, title: input, checked: false } : todo);
     setEdit(false);
     setInput("");
-    setTodos(check);
+    setTodos(editTodos);
   }
 
   return (
