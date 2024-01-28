@@ -12,7 +12,7 @@ const EditForm = (props) => {
             <FormControl>
                 <FormLabel>編集してください</FormLabel>
                 <Input value={input} onChange={(e) => { setInput(e.target.value) }} />
-                <Button colorScheme="red" onClick={handleTodoEdit}>Edit</Button>
+                
                 <Button colorScheme="blue" onClick={() => { window.location.reload() }}>cancel</Button>
             </FormControl>
         </>

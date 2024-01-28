@@ -3,15 +3,13 @@ import React, { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import Form from "./Components/Form";
 import Todos from "./Components/Todos";
-import Menus from "./Components/Menus";
-import Edit from "./Components/Edit";
-
 
 function App() {
 
   const [input, setInput] = useState("");
   const [todos, setTodos] = useState([]);
   const [edit, setEdit] = useState(false);
+  const [holder, setHolder] = useState("");
 
 
   const handleAddTodo = () => {
@@ -45,36 +43,44 @@ function App() {
     setTodos(updatedTodos);
   }
 
-  const onClickDelete = () => {
-    const incompleteTodos = todos.filter((todo) => todo.checked === false)
-
+  const onClickDelete = (id) => {
+    const incompleteTodos = todos.filter((todo) => !(todo.id === id && todo.checked === true))
     setTodos(incompleteTodos);
 
   }
 
-  const onClickEdit = () => {
-    let editCount = todos.filter(todo => todo.checked === true);
-    editCount.length === 1 ? setEdit(true) : (function () { setEdit(false), alert("1つのみ選択してください") }())
+  const onClickEdit = (todo) => {
+    localStorage.setItem('title', todo.title);
+    const title = localStorage.getItem("title");
+    setHolder(title);
+
+    localStorage.setItem('id', todo.id);
+    setEdit(true);
 
   }
 
   const handleTodoEdit = () => {
-    const check = todos.map((todo) => todo.checked === true ? { ...todo, title: input, checked: false } : todo);
+    if (input === "") {
+      return;
+    }
+
+    const id = localStorage.getItem('id');
+
+    const editTodos = todos.map((todo) => todo.id === id ? { ...todo, title: input, checked: false } : todo);
     setEdit(false);
+    setTodos(editTodos);
     setInput("");
-    setTodos(check);
+    localStorage.removeItem("title");
+    localStorage.removeItem('id');
+
   }
 
   return (
     <>
-      {edit ? (< Edit input={input} setInput={setInput} handleTodoEdit={handleTodoEdit} />) :
-        (< Form input={input} setInput={setInput} handleAddTodo={handleAddTodo} />)}
+      {edit ? (< Form message={"編集してください"} input={input} setInput={setInput} handleTodo={handleTodoEdit} buttonColor={"blue"} button={"Edit"} edit={edit} holder={holder} />)
+        : (< Form message={"todoを追加してください"} input={input} setInput={setInput} handleTodo={handleAddTodo} buttonColor={"green"} button={"Add"} />)}
 
-      < Todos todos={todos} onClickChecked={onClickChecked} />
-
-      < Menus onClickDelete={onClickDelete} onClickEdit={onClickEdit} />
-
-
+      < Todos todos={todos} onClickChecked={onClickChecked} onClickDelete={onClickDelete} onClickEdit={onClickEdit} />
     </>
   )
 }
