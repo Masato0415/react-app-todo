@@ -44,7 +44,7 @@ function App() {
   }
 
   const onClickDelete = (id) => {
-    const incompleteTodos = todos.filter((todo) => !(todo.id === id && todo.checked === true))
+    const incompleteTodos = todos.filter((todo) => !(todo.id === id))
     setTodos(incompleteTodos);
 
   }
