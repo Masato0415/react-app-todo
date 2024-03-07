@@ -1,15 +1,15 @@
 /* eslint-disable */
-import React, { useState, useEffect } from 'react';
-import {
-  Box, Menu, MenuButton, MenuList, MenuItem, Button, Checkbox, FormControl, FormLabel, Input, Flex,Text
-} from '@chakra-ui/react';
+import React, { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-
+import Form from "./Components/Form";
+import Todos from "./Components/Todos";
 
 function App() {
 
   const [input, setInput] = useState("");
   const [todos, setTodos] = useState([]);
+  const [edit, setEdit] = useState(false);
+  const [holder, setHolder] = useState("");
 
 
   const handleAddTodo = () => {
@@ -41,49 +41,47 @@ function App() {
     const updatedTodos = todos.map((todo) => { return todo.id === id ? { ...todo, checked: !todo.checked } : todo });
 
     setTodos(updatedTodos);
+  }
 
+  const onClickDelete = (id) => {
+    const incompleteTodos = todos.filter((todo) => !(todo.id === id))
+    setTodos(incompleteTodos);
 
   }
 
-  const onClickDelete = () => {
-    const incompleteTodos = todos.filter((todo) => todo.checked === false)
-    
-    setTodos(incompleteTodos);
+  const onClickEdit = (todo) => {
+    localStorage.setItem('title', todo.title);
+    const title = localStorage.getItem("title");
+    setHolder(title);
+
+    localStorage.setItem('id', todo.id);
+    setEdit(true);
+
+  }
+
+  const handleTodoEdit = () => {
+    if (input === "") {
+      return;
+    }
+
+    const id = localStorage.getItem('id');
+
+    const editTodos = todos.map((todo) => todo.id === id ? { ...todo, title: input, checked: false } : todo);
+    setEdit(false);
+    setTodos(editTodos);
+    setInput("");
+    localStorage.removeItem("title");
+    localStorage.removeItem('id');
 
   }
 
   return (
     <>
-      <FormControl>
-        <FormLabel>Todoを入力してください</FormLabel>
-        <Input value={input} onChange={(e) => { setInput(e.target.value) }} />
-        <Button colorScheme="green" onClick={handleAddTodo}>Add</Button>
-      </FormControl>
+      {edit ? (< Form message={"編集してください"} input={input} setInput={setInput} handleTodo={handleTodoEdit} buttonColor={"blue"} button={"Edit"} edit={edit} holder={holder} />)
+        : (< Form message={"todoを追加してください"} input={input} setInput={setInput} handleTodo={handleAddTodo} buttonColor={"green"} button={"Add"} />)}
 
-
-      {todos.map((todo) => (
-        <Box key={todo.id}>
-          <Flex>
-            <Checkbox onChange={() => { onClickChecked(todo.id) }} isChecked={todo.checked}></Checkbox>
-            {todo.checked ? (<Box as="del">{todo.title}</Box>) : (<Box>{todo.title}</Box>)}
-          </Flex>
-        </Box>
-      ))}
-
-      <Menu>
-        <MenuButton as={Button}>
-          メニュー
-        </MenuButton>
-        <MenuList>
-          <MenuItem>編集</MenuItem>
-          <MenuItem onClick={onClickDelete}>削除</MenuItem>
-        </MenuList>
-      </Menu>
-      
-
+      < Todos todos={todos} onClickChecked={onClickChecked} onClickDelete={onClickDelete} onClickEdit={onClickEdit} />
     </>
-  );
-
+  )
 }
-
 export default App;
