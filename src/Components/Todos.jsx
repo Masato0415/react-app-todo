@@ -1,9 +1,10 @@
 import React from "react";
 import { Box, Checkbox, Flex, Button } from '@chakra-ui/react';
 
-const Todos = (props) => {
+// propsの値渡しについて分割代入を使用した以下の書き方も覚えておきましょう！
+const Todos = ({ todos, onClickChecked, onClickDelete, onClickEdit, }) => {
 
-    const { todos, onClickChecked, onClickDelete, onClickEdit, } = props;
+    // const { todos, onClickChecked, onClickDelete, onClickEdit, } = props;
 
     return (
         <>

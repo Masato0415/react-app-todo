@@ -6,8 +6,10 @@ import Todos from "./Components/Todos";
 
 function App() {
 
+  // inputだけだとこのstateに何が入るかいまいちイメージつかないので、todoTitleやtodoInputなどに変更してもいいかもしれません！
   const [input, setInput] = useState("");
   const [todos, setTodos] = useState([]);
+  // true or falseのみを持つstateには名前にisやhasをつけるのが一般的です！　今回はisEditとかにしてもいいかもしれません。
   const [edit, setEdit] = useState(false);
   const [holder, setHolder] = useState("");
 
